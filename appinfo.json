@@ -4,13 +4,13 @@
         ""
     ],
     "companyName": "cmey63@gmail.com",
-    "longName": "relaweather watch app",
+    "longName": "Relaweather",
     "projectType": "native",
     "resources": {
-
+        "media": []
     },
-    "shortName": "relaweather",
-    "uuid": "55130d97-a594-4946-a357-98afc6e35fc5",
+    "shortName": "Relaweather",
+    "uuid": "4d6e4d57-27a2-4685-a55c-74d6294bfd40",
     "versionCode": 1,
     "versionLabel": "1.0",
     "watchapp": {

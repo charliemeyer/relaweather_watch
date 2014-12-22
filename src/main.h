@@ -1,19 +1,17 @@
-#pragma once //wtf is this?
+#pragma once
 
 //---------------------------------------------//
-//        a basic watchface.                   //
+//        relaweather watch app                //
 //        by: Charlie Meyer                    //
-//        November-December 2014               //
+//        December 2014                        //
 //---------------------------------------------//
         
-//deals with changing time, calls update time
-static void time_handler(struct tm *tick_time, TimeUnits units_changed);
 //loads all the app elements and UI
 static void main_window_load(Window *window);
 //unloads all the app elements and UI 
 static void main_window_unload(Window *window);
-//the logic to get the time formatted
-static void update_time();
+//the logic to get the updated forecast
+static void update_weather();
 //put the UI elements on da heap
 //make the event handlers for app_event_loop 
 //and push the main window to the window stack 
