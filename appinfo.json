@@ -1,0 +1,19 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "cmey63@gmail.com",
+    "longName": "relaweather watch app",
+    "projectType": "native",
+    "resources": {
+
+    },
+    "shortName": "relaweather",
+    "uuid": "55130d97-a594-4946-a357-98afc6e35fc5",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
