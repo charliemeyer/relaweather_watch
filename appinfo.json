@@ -1,7 +1,10 @@
 {
-    "appKeys": {},
+    "appKeys": {
+        "KEY_FORECAST": 1,
+        "KEY_LOCATION": 0
+    },
     "capabilities": [
-        ""
+        "location"
     ],
     "companyName": "cmey63@gmail.com",
     "longName": "Relaweather",

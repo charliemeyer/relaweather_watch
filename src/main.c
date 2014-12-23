@@ -5,6 +5,7 @@
 #define KEY_FORECAST 1
         
 static Window *s_main_window;
+static TextLayer *location_text_layer;
 static TextLayer *forecast_text_layer;
 
 int main() {
@@ -16,16 +17,24 @@ int main() {
 static void main_window_load(Window *window) {      
         window_set_fullscreen(window, false);	
 
-        forecast_text_layer = text_layer_create(GRect(0, 0, 144, 168));
+        location_text_layer = text_layer_create(GRect(0, 0, 144, 30));
+        text_layer_set_background_color(location_text_layer, GColorBlack);
+        text_layer_set_text_color(location_text_layer, GColorWhite);
+        text_layer_set_font(location_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
+        text_layer_set_text_alignment(location_text_layer, GTextAlignmentCenter);   
+     
+        forecast_text_layer = text_layer_create(GRect(10, 48, 124, 120));
         text_layer_set_background_color(forecast_text_layer, GColorBlack);
         text_layer_set_text_color(forecast_text_layer, GColorWhite);
-        text_layer_set_font(forecast_text_layer, fonts_get_system_font(FONT_KEY_BITHAM_30_BLACK));
-        text_layer_set_text_alignment(forecast_text_layer, GTextAlignmentCenter);        
+        text_layer_set_font(forecast_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
+        text_layer_set_text_alignment(forecast_text_layer, GTextAlignmentLeft);        
 
+        layer_add_child(window_get_root_layer(window), text_layer_get_layer(location_text_layer));
         layer_add_child(window_get_root_layer(window), text_layer_get_layer(forecast_text_layer));
 }
 
 static void main_window_unload(Window *window) {
+        text_layer_destroy(location_text_layer);
         text_layer_destroy(forecast_text_layer);
 }
 
@@ -48,7 +57,29 @@ static void init() {
 }
 
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
-
+        // Read first item
+        APP_LOG(APP_LOG_LEVEL_ERROR, "inbox received callback");
+        static char location_buffer[32];
+        static char forecast_buffer[150];
+        Tuple *t = dict_read_first(iterator);
+        while(t != NULL) {
+                switch(t->key) {
+                        case KEY_LOCATION:
+                                snprintf(location_buffer, sizeof(location_buffer), "%s", t->value->cstring);
+                                APP_LOG(APP_LOG_LEVEL_ERROR, "Set location buffer! %s", location_buffer);
+                                break;
+                        case KEY_FORECAST:
+                                snprintf(forecast_buffer, sizeof(forecast_buffer), "%s", t->value->cstring);
+                                APP_LOG(APP_LOG_LEVEL_ERROR, "Set forecast buffer! %s", forecast_buffer);
+                                break;
+                        default:
+                                APP_LOG(APP_LOG_LEVEL_ERROR, "Key %d not recognized!", (int)t->key);
+                                break;
+                }
+                t = dict_read_next(iterator);
+        }
+        text_layer_set_text(forecast_text_layer, forecast_buffer);
+        text_layer_set_text(location_text_layer, location_buffer);
 }
 
 static void inbox_dropped_callback(AppMessageResult reason, void *context) {
@@ -65,7 +96,7 @@ static void outbox_sent_callback(DictionaryIterator *iterator, void *context) {
 
 static void update_weather() {
         // create buffers for the time, date, weekday
-        static char weather_buffer[] = "00:00";
+        static char weather_buffer[] = "loading...";
 
         text_layer_set_text(forecast_text_layer, weather_buffer);
 }
