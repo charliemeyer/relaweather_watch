@@ -10,6 +10,11 @@
 static void main_window_load(Window *window);
 //unloads all the app elements and UI 
 static void main_window_unload(Window *window);
+//functions to handle all of the appmessage stuff
+static void inbox_received_callback(DictionaryIterator *iterator, void *context);
+static void inbox_dropped_callback(AppMessageResult reason, void *context);
+static void outbox_failed_callback(DictionaryIterator *iterator, AppMessageResult reason, void *context);
+static void outbox_sent_callback(DictionaryIterator *iterator, void *context);
 //the logic to get the updated forecast
 static void update_weather();
 //put the UI elements on da heap
