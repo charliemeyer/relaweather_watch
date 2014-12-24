@@ -38,12 +38,13 @@ function locationSuccess(pos) {
         var url = "http://relaweather.appspot.com/api?lat=" + pos.coords.latitude + "&lng=" + pos.coords.longitude;
         xhrRequest(url, "GET", function(responseText) {
                 var data = JSON.parse(responseText);
-                var forecast = data.current;
+                var forecasts = [data.current, data.next, data.next_next];
                 var location = data.city + ", " + data.state;
-                console.log("Conditions are " + forecast);
                 var dictionary = {
                         "KEY_LOCATION": location,
-                        "KEY_FORECAST": forecast
+                        "KEY_FORECAST1": forecasts[0],
+                        "KEY_FORECAST2": forecasts[1],
+                        "KEY_FORECAST3": forecasts[2],
                 };
                 Pebble.sendAppMessage(dictionary,
                         function(e) {

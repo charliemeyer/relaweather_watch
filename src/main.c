@@ -2,7 +2,9 @@
 #include "main.h"
 //the keys for the app message stuff
 #define KEY_LOCATION 0
-#define KEY_FORECAST 1
+#define KEY_FORECAST1 1
+#define KEY_FORECAST2 2
+#define KEY_FORECAST3 3
         
 static Window *s_main_window;
 static TextLayer *location_text_layer;
@@ -60,7 +62,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
         // Read first item
         APP_LOG(APP_LOG_LEVEL_ERROR, "inbox received callback");
         static char location_buffer[32];
-        static char forecast_buffer[150];
+        static char forecast_buffers[3][150];
         Tuple *t = dict_read_first(iterator);
         while(t != NULL) {
                 switch(t->key) {
@@ -68,30 +70,38 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
                                 snprintf(location_buffer, sizeof(location_buffer), "%s", t->value->cstring);
                                 APP_LOG(APP_LOG_LEVEL_ERROR, "Set location buffer! %s", location_buffer);
                                 break;
-                        case KEY_FORECAST:
-                                snprintf(forecast_buffer, sizeof(forecast_buffer), "%s", t->value->cstring);
-                                APP_LOG(APP_LOG_LEVEL_ERROR, "Set forecast buffer! %s", forecast_buffer);
+                        case KEY_FORECAST1:
+                                snprintf(forecast_buffers[0], sizeof(forecast_buffers[0]), "%s", t->value->cstring);
+                                APP_LOG(APP_LOG_LEVEL_ERROR, "Set forecast buffer! %s", forecast_buffers[0]);
                                 break;
+                        case KEY_FORECAST2:
+                                snprintf(forecast_buffers[1], sizeof(forecast_buffers[1]), "%s", t->value->cstring);
+                                APP_LOG(APP_LOG_LEVEL_ERROR, "Set forecast buffer! %s", forecast_buffers[1]);
+                                break;
+                        case KEY_FORECAST3:
+                                snprintf(forecast_buffers[2], sizeof(forecast_buffers[2]), "%s", t->value->cstring);
+                                APP_LOG(APP_LOG_LEVEL_ERROR, "Set forecast buffer! %s", forecast_buffers[2]);
+                                break;                
                         default:
                                 APP_LOG(APP_LOG_LEVEL_ERROR, "Key %d not recognized!", (int)t->key);
                                 break;
                 }
                 t = dict_read_next(iterator);
         }
-        text_layer_set_text(forecast_text_layer, forecast_buffer);
+        text_layer_set_text(forecast_text_layer, forecast_buffers[0]);
         text_layer_set_text(location_text_layer, location_buffer);
 }
 
 static void inbox_dropped_callback(AppMessageResult reason, void *context) {
-  APP_LOG(APP_LOG_LEVEL_ERROR, "Message dropped!");
+        APP_LOG(APP_LOG_LEVEL_ERROR, "Message dropped!");
 }
 
 static void outbox_failed_callback(DictionaryIterator *iterator, AppMessageResult reason, void *context) {
-  APP_LOG(APP_LOG_LEVEL_ERROR, "Outbox send failed!");
+        APP_LOG(APP_LOG_LEVEL_ERROR, "Outbox send failed!");
 }
 
 static void outbox_sent_callback(DictionaryIterator *iterator, void *context) {
-  APP_LOG(APP_LOG_LEVEL_INFO, "Outbox send success!");
+        APP_LOG(APP_LOG_LEVEL_INFO, "Outbox send success!");
 }
 
 static void update_weather() {
