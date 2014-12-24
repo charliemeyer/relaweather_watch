@@ -48,6 +48,7 @@ static void init() {
                 .load = main_window_load,
                 .unload = main_window_unload
         });
+        window_set_click_config_provider(window, click_config_provider);
         window_stack_push(s_main_window, true);
         // set up all of the app message handlers
         app_message_register_inbox_received(inbox_received_callback);
@@ -56,6 +57,10 @@ static void init() {
         app_message_register_outbox_sent(outbox_sent_callback);
         app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
         update_weather();
+}
+
+static void deinit() {
+        window_destroy(s_main_window);
 }
 
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
@@ -92,19 +97,31 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
         text_layer_set_text(location_text_layer, location_buffer);
 }
 
-void up_click_handler(ClickRecognizerRef recognizer, void *context)
+static void click_config_provider(void *context)
+{
+    window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
+    window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
+    window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
+}
+
+static void up_click_handler(ClickRecognizerRef recognizer, void *context)
 {
         
 }
  
-void down_click_handler(ClickRecognizerRef recognizer, void *context)
+static void down_click_handler(ClickRecognizerRef recognizer, void *context)
 {
         
 }
  
-void select_click_handler(ClickRecognizerRef recognizer, void *context)
+static void select_click_handler(ClickRecognizerRef recognizer, void *context)
 {
-        
+        DictionaryIterator *iter;       
+        app_message_outbox_begin(&iter);
+        // Add a key-value pair
+        dict_write_uint8(iter, 0, 0);
+        // Send the message!
+        app_message_outbox_send();
 }
 
 static void inbox_dropped_callback(AppMessageResult reason, void *context) {
@@ -126,7 +143,4 @@ static void update_weather() {
         text_layer_set_text(forecast_text_layer, weather_buffer);
 }
 
-static void deinit() {
-        window_destroy(s_main_window);
-}
 

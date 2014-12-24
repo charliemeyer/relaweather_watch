@@ -17,6 +17,10 @@ static void outbox_failed_callback(DictionaryIterator *iterator, AppMessageResul
 static void outbox_sent_callback(DictionaryIterator *iterator, void *context);
 //the logic to get the updated forecast
 static void update_weather();
+//button handlers
+static void up_click_handler(ClickRecognizerRef recognizer, void *context);
+static void down_click_handler(ClickRecognizerRef recognizer, void *context);
+static void select_click_handler(ClickRecognizerRef recognizer, void *context);
 //put the UI elements on da heap
 //make the event handlers for app_event_loop 
 //and push the main window to the window stack 
