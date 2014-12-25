@@ -1,6 +1,8 @@
 {
     "appKeys": {
-        "KEY_FORECAST": 1,
+        "KEY_FORECAST1": 1,
+        "KEY_FORECAST2": 2,
+        "KEY_FORECAST3": 3,
         "KEY_LOCATION": 0
     },
     "capabilities": [

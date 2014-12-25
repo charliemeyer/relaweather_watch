@@ -1,5 +1,5 @@
 #pragma once
-
+#include <pebble.h>
 //---------------------------------------------//
 //        relaweather watch app                //
 //        by: Charlie Meyer                    //
@@ -17,6 +17,8 @@ static void outbox_failed_callback(DictionaryIterator *iterator, AppMessageResul
 static void outbox_sent_callback(DictionaryIterator *iterator, void *context);
 //the logic to get the updated forecast
 static void update_weather();
+//registers the button handlers w/ the os
+static void click_config_provider(void *context);
 //button handlers
 static void up_click_handler(ClickRecognizerRef recognizer, void *context);
 static void down_click_handler(ClickRecognizerRef recognizer, void *context);
